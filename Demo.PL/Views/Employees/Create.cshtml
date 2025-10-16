@@ -1,0 +1,30 @@
+﻿@using Demo.BLL.Data_Transfer_Objects__DTOs_.EmployeeDTOs
+@using Demo.BLL.Services.DepartmentServices
+@using Demo.DAL.Models.Shared
+@using Demo.PL.ViewModels
+@model EmployeeViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row justify-content-center align-content-center mt-3">
+    <h1 class="col-8 my-4">Create Employee</h1>
+    <form method="post" asp-controller="Employees" asp-action="Create" enctype="multipart/form-data" class="row col-8">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <partial name="PartialViews/CreateEditPartialView" />
+
+        <div class="form-group mb-3 col-6">
+            <label for="CvFile">Upload CV</label>
+            <input asp-for="CvFile" type="file" class="form-control" />
+            <span asp-validation-for="CvFile" class="text-danger"></span>
+        </div>
+
+        <div class="mt-4 m-auto">
+            <input class="btn btn-primary" type="submit" value="Create" />
+            <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+        </div>
+    </form>
+</div>

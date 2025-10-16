@@ -1,0 +1,34 @@
+﻿@using Demo.Presentation.Models
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = @"..\Shared\_AuthLayout.cshtml";
+}
+
+<div class="main-agileinfo">
+    <div class="agileits-top">
+
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="All"></div>
+
+            <input asp-for="Email" placeholder="Email" required="">
+            <span asp-validation-for="Email"></span>
+            <br />
+            <input asp-for="Password" placeholder="Password" required="">
+            <span asp-validation-for="Password"></span>
+            <br />
+
+            <div class="wthree-text">
+                <label class="anim">
+                    <input asp-for="RememberMe" class="" required>
+                    <span>Keep Me Signed In</span>
+                </label>
+                <div class="clear"> </div>
+            </div>
+            <input type="submit" value="SIGNIN">
+            <a asp-action="LoginWithGoogle">Login With Google</a>
+        </form>
+        <p>Don't have an Account? <a asp-action="Register"> Register Now!</a></p>
+		<p><a asp-action="ForgetPassword"> Forget Password!</a></p>
+    </div>
+</div>

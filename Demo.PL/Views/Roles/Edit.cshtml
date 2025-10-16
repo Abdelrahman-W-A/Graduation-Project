@@ -1,0 +1,31 @@
+﻿@using Demo.BLL.Data_Transfer_Objects__DTOs_
+@using Demo.BLL.Data_Transfer_Objects__DTOs_.RolesDTOs
+@using Demo.BLL.Data_Transfer_Objects__DTOs_.UserDTOs
+@using Demo.PL.DepartmentViewModels
+@model RoleEditDTO
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row justify-content-center align-content-center mt-3">
+    <h1 class="col-8 my-4">Edit User</h1>
+    <form method="post" asp-controller="Users" asp-action="Edit" class="col-8">
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="Id"></label>
+            <input asp-for="Id" class="form-control" readonly />
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="RoleName"></label>
+            <input asp-for="RoleName" class="form-control" />
+            <span asp-validation-for="RoleName" class="text-danger"></span>
+        </div>
+        <div class="mt-4 m-auto">
+            <input class="btn btn-success" type="submit" value="Save"/>
+            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-dark">Back to list</a>
+        </div>
+    </form>
+</div>
+
+

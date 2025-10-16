@@ -1,0 +1,200 @@
+﻿@{
+    ViewData["Title"] = "Privacy";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <style>
+        .card {
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .table th {
+            background-color: #f8f9fa;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(90deg, #0077b5, #333);
+            color: #fff;
+            font-size: 18px;
+            border-radius: 8px;
+        }
+
+            footer strong {
+                color: #ffd700;
+            }
+    </style>
+</head>
+<div>
+    <h1 >@ViewData["Title"]</h1>
+
+    <p>
+        <strong>SCS</strong> is a comprehensive management system designed to help
+        <strong>startup companies</strong> streamline their operations by managing
+        employees, departments, users, and transactions effectively.
+    </p>
+
+    <!-- Summary Cards -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="fas fa-star"></i> Key Features</h5>
+                    <ul class="list-unstyled">
+                        <li>👨‍💼 Employee Management</li>
+                        <li>🏢 Department Management</li>
+                        <li>🔑 User Accounts</li>
+                        <li>💳 Transactions Module</li>
+                        <li>📊 Insights</li>
+                        <li>⚙️ Scalable Architecture</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="fas fa-cogs"></i> Technologies</h5>
+                    <ul class="list-unstyled">
+                        <li>ASP.NET Core (C#) => (MVC)</li>
+                        <li>Entity Framework Core</li>
+                        <li>SQL Server</li>
+                        <li>Bootstrap 5</li>
+                        <li>HTML, CSS, JavaScript</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-info"><i class="fas fa-info-circle"></i> Project Info</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Version:</strong> 1.0 (2025)</li>
+                        <li>
+                            <strong>Repository:</strong>
+                            <a href="" target="_blank">
+                                <i class="fab fa-github"></i> GitHub Repo
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <p class="mb-0">Special Thanks to <strong>Dr. Ali Fakhry</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developers Table -->
+    <h2 class="mt-5">👨‍💻 Developers Contributed to This Project:</h2>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <th>LinkedIn</th>
+                    <th>GitHub</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Abdelrahman Walid Ahmed Sayed</td>
+                    <td>G4-BIS</td>
+                    <td><a href="https://www.linkedin.com/in/abdelrahmanwalid" target="_blank"><i class="fab fa-linkedin fa-2x text-primary"></i></a></td>
+                    <td><a href="https://github.com/Abdelrahman-W-A" target="_blank"><i class="fab fa-github fa-2x text-dark"></i></a></td>
+                    <td>(+20) 10 3258 1381</td>
+                </tr>
+                <tr>
+                    <td>Ahmed Hazem Salah Hasanin</td>
+                    <td>G4-BIS</td>
+                    <td><a href="https://www.linkedin.com/in/ahmed-hazem-salah-090a9027a" target="_blank"><i class="fab fa-linkedin fa-2x text-primary"></i></a></td>
+                    <td><a href="https://github.com/ahmedhazemsalah03-ai" target="_blank"><i class="fab fa-github fa-2x text-dark"></i></a></td>
+                    <td>(+20) 10 1877 2347</td>
+                </tr>
+                <tr>
+                    <td>Sama Ahmed Saeed Elkady</td>
+                    <td>G4-BIS</td>
+                    <td><a href="https://www.linkedin.com/in/sama-ahmed-752b97374" target="_blank"><i class="fab fa-linkedin fa-2x text-primary"></i></a></td>
+                    <td><a href="https://github.com/ssamaahmmed-create" target="_blank"><i class="fab fa-github fa-2x text-dark"></i></a></td>
+                    <td>(+20) 12 7951 6693</td>
+                </tr>
+                <tr>
+                    <td>Rawan Ahmed Mareen Ebrahim</td>
+                    <td>G4-BIS</td>
+                    <td><a href="https://www.linkedin.com/in/rowan-mareen-649250375" target="_blank"><i class="fab fa-linkedin fa-2x text-primary"></i></a></td>
+                    <td><a href="#"><i class="fab fa-github fa-2x text-dark"></i></a></td>
+                    <td>(+20) 11 2045 1072</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <footer>
+        <div class="rocket-container">
+            <i class="fas fa-rocket rocket"></i>
+        </div>
+        <p><strong>Thanks</strong> for trusting our team 🚀</p>
+    </footer>
+
+    <style>
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(to right, #f0f0f0, #e8e8e8);
+            color: #333;
+            font-size: 18px;
+            border-top: 2px solid #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rocket-container {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            overflow: hidden;
+        }
+
+        .rocket {
+            font-size: 30px;
+            color: #ff5722;
+            position: absolute;
+            animation: rocket-fly 6s linear infinite;
+        }
+
+        @@keyframes rocket-fly {
+            0%
+
+        {
+            left: -50px;
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        50% {
+            top: -30px;
+        }
+
+        100% {
+            left: 100%;
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        }</style>
