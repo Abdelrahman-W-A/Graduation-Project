@@ -1,24 +1,31 @@
+# ============================
 # Stage 1: Build
+# ============================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Copy csproj and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+# Copy the project file and restore dependencies
+COPY Demo.PL/Demo.PL.csproj Demo.PL/
+RUN dotnet restore Demo.PL/Demo.PL.csproj
 
-# Copy all files and publish
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Copy everything else and build
+COPY . .
+RUN dotnet publish Demo.PL/Demo.PL.csproj -c Release -o /app/publish
 
+# ============================
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# ============================
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Copy published output
-COPY --from=build /app/out .
+# Copy published files
+COPY --from=build /app/publish .
 
-# Expose port 5000 (default for .NET)
-EXPOSE 5000
+# Render sets a $PORT environment variable automatically
+ENV ASPNETCORE_URLS=http://+:$PORT
 
-# Start the app
+# Expose that port for clarity (Render will still override)
+EXPOSE 10000
+
+# Run the application
 ENTRYPOINT ["dotnet", "Demo.PL.dll"]
