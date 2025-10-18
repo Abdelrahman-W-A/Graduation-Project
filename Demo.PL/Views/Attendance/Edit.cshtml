@@ -1,0 +1,34 @@
+﻿@model Demo.BLL.Data_Transfer_Objects__DTOs_.EmployeeDTOs.DailyAttendanceDTO
+
+<h2>Edit Attendance</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="EmployeeId" />
+
+    <div class="form-group">
+        <label asp-for="Date"></label>
+        <input asp-for="Date" class="form-control" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CheckIn"></label>
+        <input asp-for="CheckIn" class="form-control" type="time" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CheckOut"></label>
+        <input asp-for="CheckOut" class="form-control" type="time" />
+    </div>
+
+    <div class="form-check">
+        <input asp-for="IsAbsent" class="form-check-input" />
+        <label asp-for="IsAbsent" class="form-check-label">Absent</label>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Edit</button>
+    <a asp-controller="Employees"
+       asp-action="Details"
+       asp-route-id="@Model.EmployeeId"
+       class="btn btn-outline-dark"><i class="bi bi-arrow-left-circle"></i> Back</a>
+</form>

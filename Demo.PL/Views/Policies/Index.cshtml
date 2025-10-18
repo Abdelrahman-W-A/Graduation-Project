@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Organization Policies & Rules";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="fw-bold"><i class="bi bi-journal-text"></i> All Organization Policies & Rules</h1>
+        <div>
+            <button id="copyBtn" class="btn btn-success me-2">
+                <i class="bi bi-clipboard"></i> Copy All
+            </button>
+            <a asp-action="GeneratePdf" asp-controller="Policies" class="btn btn-danger">
+                <i class="bi bi-file-earmark-pdf"></i> Generate PDF
+            </a>
+        </div>
+    </div>
+
+
+    <div id="policiesContent">
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-clock"></i> 1. Working Hours</h4>
+                <p>
+                    Employees are expected to work from <strong>9:00 AM to 5:00 PM</strong>, Sunday through Thursday.
+                    Flexible working hours may be approved by management in special cases.
+                </p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-calendar-check"></i> 2. Leave Policy</h4>
+                <ul>
+                    <li>Annual leave must be approved at least 1 week in advance.</li>
+                    <li>Sick leave requires a valid medical certificate if longer than 2 days.</li>
+                    <li>Emergency leave should be reported as soon as possible to the manager.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-shield-lock"></i> 3. Confidentiality</h4>
+                <p>
+                    All employees must protect company data and refrain from sharing sensitive information outside the company.
+                    Violation of this policy may result in disciplinary action, including termination.
+                </p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-people"></i> 4. Code of Conduct</h4>
+                <ul>
+                    <li>Maintain professionalism and integrity at all times.</li>
+                    <li>Respect colleagues, clients, and organizational culture.</li>
+                    <li>Avoid conflicts of interest and report any unethical behavior.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-laptop"></i> 5. Use of Company Assets</h4>
+                <p>
+                    Company equipment (computers, software, vehicles, etc.) must be used responsibly and only for official purposes.
+                    Unauthorized use is strictly prohibited.
+                </p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body">
+                <h4 class="text-primary"><i class="bi bi-hospital"></i> 6. Health & Safety</h4>
+                <p>
+                    Employees must comply with health and safety regulations. Report unsafe conditions immediately.
+                    Emergency procedures should be followed as per training.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("copyBtn").addEventListener("click", function () {
+            let content = document.getElementById("policiesContent").innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                alert("✅ Policies copied to clipboard!");
+            });
+        });
+    </script>
+}

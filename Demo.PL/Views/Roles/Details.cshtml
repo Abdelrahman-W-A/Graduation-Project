@@ -1,0 +1,36 @@
+﻿@using Demo.BLL.Data_Transfer_Objects__DTOs_.EmployeeDTOs
+@using Demo.BLL.Data_Transfer_Objects__DTOs_.RolesDTOs
+@using Demo.BLL.Data_Transfer_Objects__DTOs_.UserDTOs
+@model RoleDetailsDTO
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h1 class="my-5 w-75">User Details</h1>
+
+<ul class="nav nav-tabs" id="RoleTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+    </li>
+</ul>
+
+<!-- General Tab Content -->
+<div class="tab-pane fade show active p-4 border" id="general" role="tabpanel" aria-labelledby="general-tab">
+
+    <div class="row">
+        <div class="form-group mb-3 col-6">
+            <label class="form-label" asp-for="Id"></label>
+            <input asp-for="Id" class="form-control" readonly />
+        </div>
+        <div class="form-group mb-3 col-6">
+            <label class="form-label" asp-for="RoleName"></label>
+            <input asp-for="RoleName" class="form-control" readonly />
+        </div>
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-outline-dark">Back To list</a>
+        </div>
+    </div>
+</div>

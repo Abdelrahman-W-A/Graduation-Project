@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Demo.BLL.Data_Transfer_Objects__DTOs_.EmployeeDTOs.DailyAttendanceDTO>
+@{
+    ViewData["Title"] = "Attendance List";
+    var employeeId = ViewBag.EmployeeId;
+}
+
+<h2>Attendance List</h2>
+
+<table class="table table-bordered">
+    <thead class="text-center">
+        <tr>
+            <th>Date</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                <td>@item.CheckIn</td>
+                <td>@item.CheckOut</td>
+                <td>@(item.IsAbsent ? "Absent" : "Present")</td>
+                <td>
+                    <a asp-controller="Attendance"
+                       asp-action="Edit"
+                       asp-route-id="@item.Id"
+                       class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                </td>
+				<td>
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteModal-@item.Id"><i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+
+                </td>
+            </tr>
+<div class="modal fade" id="confirmDeleteModal-@item.Id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this attendance record?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-controller="Attendance"
+                      asp-action="DeleteConfirmed"
+                      method="post"
+                      style="display:inline;">
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <input type="hidden" name="employeeId" value="@ViewBag.EmployeeId" />
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Employees" asp-action="AddAttendance" asp-route-employeeId="@employeeId" class="btn btn-primary">Add Attendance</a>
+<a asp-controller="Employees" asp-action="Details" asp-route-id="@employeeId" class="btn btn-outline-dark"><i class="bi bi-arrow-left-circle"></i> Back</a>

@@ -1,0 +1,243 @@
+﻿@model Demo.PL.ViewModels.InvoicesViewModel
+
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<h1>All Invoices</h1>
+<br/>
+<h5>(Choose whether to search by <u>Invoice Code</u> or <u>Date Range</u>)</h5>
+
+<!-- 🔹 Search Form -->
+<form method="get" asp-action="InvoicesIndex" asp-controller="SalesInvoices" class="row g-3 mb-4">
+
+    <!-- 🔘 Search Mode Buttons -->
+    <div class="col-12 mb-3">
+        <div class="btn-group" role="group" aria-label="Search Mode">
+            <button type="button" id="searchByCodeBtn" class="btn btn-outline-primary active">Search by Invoice Code</button>
+            <button type="button" id="searchByDateBtn" class="btn btn-outline-secondary">Search by Date</button>
+        </div>
+    </div>
+
+    <!-- 🔹 Search by Code -->
+    <div id="searchByCode" class="col-md-4">
+        <label>Invoice Code:</label>
+        <input type="text" name="searchCode" class="form-control"
+               placeholder="Search by Invoice Code"
+               value="@ViewBag.SearchCode" />
+    </div>
+
+    <!-- 🔹 Search by Date -->
+    <div id="searchByDate" class="row" style="display:none;">
+        <div class="col-md-3">
+            <label>Date From:</label>
+            <input type="date" name="fromDate" class="form-control" value="@ViewBag.FromDate" />
+        </div>
+        <div class="col-md-3">
+            <label>Date To:</label>
+            <input type="date" name="toDate" class="form-control" value="@ViewBag.ToDate" />
+        </div>
+    </div>
+
+    <!-- 🔹 Buttons -->
+    <div class="col-md-3 mt-3">
+        <br/>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="InvoicesIndex" asp-controller="SalesInvoices" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+
+<!-- 🔹 Custom Colors -->
+<style>
+    #sales {
+        background-color: #dbeafe;
+        border: 3px solid #1d4ed8;
+        border-radius: 8px;
+    }
+
+    #purchases {
+        background-color: #fee2e2;
+        border: 3px solid #b91c1c;
+        border-radius: 8px;
+    }
+
+    #sales-tab {
+        color: #1d4ed8;
+        font-weight: bold;
+    }
+
+    #purchases-tab {
+        color: #b91c1c;
+        font-weight: bold;
+    }
+
+    #sales-tab.active {
+        background-color: #1d4ed8;
+        color: #fff !important;
+    }
+
+    #purchases-tab.active {
+        background-color: #b91c1c;
+        color: #fff !important;
+    }
+</style>
+
+<!-- 🔹 Tabs -->
+<ul class="nav nav-tabs" id="invoiceTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="sales-tab" data-bs-toggle="tab" href="#sales" role="tab"
+           aria-controls="sales" aria-selected="true">Sales Invoices</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="purchases-tab" data-bs-toggle="tab" href="#purchases" role="tab"
+           aria-controls="purchases" aria-selected="false">Purchases Invoices</a>
+    </li>
+</ul>
+
+<div class="tab-content mt-3">
+    <!-- Sales Tab -->
+    <div class="tab-pane fade show active p-4 border" id="sales" role="tabpanel" aria-labelledby="sales-tab">
+        <p>
+            <a asp-controller="SalesInvoices" asp-action="Create" class="btn btn-primary">Create Sales Invoice</a>
+        </p>
+
+        @if (Model.SalesInvoices == null || !Model.SalesInvoices.Any())
+        {
+            <div class="alert alert-info">There are no Sales Invoices.</div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th>Invoice Id</th>
+                        <th>Invoice Code</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    @foreach (var invoice in Model.SalesInvoices)
+                    {
+                        <tr>
+                            <td>@invoice.Id</td>
+                            <td>@invoice.InvoiceCode</td>
+                            <td>@invoice.Client?.Name</td>
+                            <td>@invoice.InvoiceDate.ToShortDateString()</td>
+                            <td>@invoice.TotalAmount.ToString("C")</td>
+                            <td><a asp-controller="SalesInvoices" asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Details</a></td>
+                            <td><a asp-controller="SalesInvoices" asp-action="Edit" asp-route-id="@invoice.Id" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a></td>
+                            <td><a asp-controller="SalesInvoices" asp-action="Delete" asp-route-id="@invoice.Id" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <a asp-controller="Clients" asp-action="Index" class="btn btn-sm btn-secondary">
+            <i class="bi bi-person-fill"></i> Manage Clients
+        </a>
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-sm btn-secondary">
+            <i class="bi bi-tags-fill"></i> Manage Categories Inventory
+        </a>
+    </div>
+
+    <!-- Purchase Tab -->
+    <div class="tab-pane fade p-4 border" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
+        <p>
+            <a asp-controller="PurchaseInvoices" asp-action="Create" class="btn btn-primary">Create Purchase Invoice</a>
+        </p>
+
+        @if (Model.PurchaseInvoices == null || !Model.PurchaseInvoices.Any())
+        {
+            <div class="alert alert-warning">There are no Purchase Invoices.</div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th>Invoice Id</th>
+                        <th>Invoice Code</th>
+                        <th>Seller</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var invoice in Model.PurchaseInvoices)
+                    {
+                        <tr class="text-center">
+                            <td>@invoice.Id</td>
+                            <td>@invoice.InvoiceCode</td>
+                            <td>@invoice.Seller?.Name</td>
+                            <td>@invoice.InvoiceDate.ToShortDateString()</td>
+                            <td>@invoice.TotalAmount.ToString("C")</td>
+                            <td><a asp-controller="PurchaseInvoices" asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Details</a></td>
+                            <td><a asp-controller="PurchaseInvoices" asp-action="Edit" asp-route-id="@invoice.Id" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a></td>
+                            <td><a asp-controller="PurchaseInvoices" asp-action="Delete" asp-route-id="@invoice.Id" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <a asp-controller="Sellers" asp-action="Index" class="btn btn-sm btn-secondary">
+            <i class="bi bi-people-fill"></i> Manage Sellers
+        </a>
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-sm btn-secondary">
+            <i class="bi bi-tags-fill"></i> Manage Categories Inventory
+        </a>
+    </div>
+</div>
+
+<!-- 🔹 JS to prevent code + dates together -->
+<script>
+        const byCodeBtn = document.getElementById('searchByCodeBtn');
+        const byDateBtn = document.getElementById('searchByDateBtn');
+        const codeSection = document.getElementById('searchByCode');
+        const dateSection = document.getElementById('searchByDate');
+        const form = document.querySelector('form');
+
+        // Toggle between search types
+        byCodeBtn.addEventListener('click', () => {
+            codeSection.style.display = 'block';
+            dateSection.style.display = 'none';
+            byCodeBtn.classList.add('active', 'btn-primary');
+            byDateBtn.classList.remove('active', 'btn-primary');
+            byDateBtn.classList.add('btn-outline-secondary');
+        });
+
+        byDateBtn.addEventListener('click', () => {
+            codeSection.style.display = 'none';
+            dateSection.style.display = 'flex';
+            byDateBtn.classList.add('active', 'btn-primary');
+            byCodeBtn.classList.remove('active', 'btn-primary');
+            byCodeBtn.classList.add('btn-outline-secondary');
+        });
+
+        // Prevent mixing search types (just in case)
+        form.addEventListener('submit', function (e) {
+            const code = document.querySelector('[name="searchCode"]').value.trim();
+            const from = document.querySelector('[name="fromDate"]').value;
+            const to = document.querySelector('[name="toDate"]').value;
+
+            // if date section hidden but code empty
+            if (codeSection.style.display === 'block' && !code) {
+                alert("Please enter an invoice code.");
+                e.preventDefault();
+            }
+            // if date section visible but no dates
+            if (dateSection.style.display === 'flex' && !from && !to) {
+                alert("Please enter at least one date.");
+                e.preventDefault();
+            }
+        });
+</script>

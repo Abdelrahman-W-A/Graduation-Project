@@ -1,0 +1,195 @@
+﻿@model Demo.DAL.Models.Invoice.PurchasesInvoice.PurchaseInvoice
+
+@{
+    ViewData["Title"] = "Create Purchase Invoice";
+    var sellers = ViewBag.Sellers as SelectList;
+    var categories = ViewBag.Categories as SelectList;
+}
+
+<h2>Create Purchase Invoice</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mt-2">
+        <label asp-for="InvoiceCode">Invoice Code (Optional)</label>
+        <input asp-for="InvoiceCode" class="form-control" type="text" />
+    </div>
+
+    <div>
+        <label asp-for="SellerId" class="form-label">Seller Id (Mandatory)</label>
+        <select asp-for="SellerId" asp-items="sellers" class="form-select">
+            <option value="">-- Select Seller --</option>
+        </select>
+        <span asp-validation-for="SellerId" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="InvoiceDate" class="form-label">Invoice Date (Mandatory)</label>
+        <input asp-for="InvoiceDate" class="form-control" type="date" />
+    </div>
+
+    <div>
+        <label for="attachment">Attach File (Optional)</label>
+        <input type="file" class="form-control" name="attachment" />
+    </div>
+
+    <hr />
+    <h4>Invoice Items (Optional)</h4>
+
+    <table class="table table-bordered" id="itemsTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Percentage (%)</th>
+                <th>Mode</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Default first row -->
+            <tr>
+                <td>
+                    <select name="Items[0].CategoryId" class="form-select" asp-items="categories">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                </td>
+                <td>
+                    <input name="Items[0].Quantity" class="form-control quantity" type="number" min="1" value="1" />
+                </td>
+                <td>
+                    <input name="Items[0].UnitPrice" class="form-control unit-price" type="number" step="0.01" value="0" />
+                </td>
+                <td>
+                    <input name="Items[0].Percentage" class="form-control percentage" type="number" step="0.01" value="0" />
+                </td>
+                <td>
+                    <select name="Items[0].Mode" class="form-select mode">
+                        <option value="add">Add (+)</option>
+                        <option value="subtract" selected>Subtract (−)</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control subtotal" type="number" readonly />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-outline-primary" id="addRowBtn">+ Add Item</button>
+
+    <div class="mt-3">
+        <h5>Total Invoice: <span id="totalAmount">0.00</span></h5>
+    </div>
+
+    <div class="mt-3">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        <a asp-controller="SalesInvoices" asp-action="InvoicesIndex" class="btn btn-outline-dark"><i class="bi bi-arrow-left-circle"></i> Back</a>
+    </div>
+</form>
+
+@if (ViewBag.Errors != null)
+{
+    <ul class="text-danger">
+        @foreach (var err in ViewBag.Errors)
+        {
+            <li>@err</li>
+        }
+    </ul>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        let rowIndex = 1;
+
+        // Build category options from Razor
+        let categoryOptions = ``;
+        @foreach (var cat in categories)
+        {
+            <text>categoryOptions += `<option value="@cat.Value">@cat.Text</option>`;</text>
+        }
+
+        document.getElementById('addRowBtn').addEventListener('click', () => {
+            const table = document.querySelector('#itemsTable tbody');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>
+                    <select name="Items[${rowIndex}].CategoryId" class="form-select">
+                        ${categoryOptions}
+                    </select>
+                </td>
+                <td>
+                    <input name="Items[${rowIndex}].Quantity" class="form-control quantity" type="number" min="1" value="1" />
+                </td>
+                <td>
+                    <input name="Items[${rowIndex}].UnitPrice" class="form-control unit-price" type="number" step="0.01" value="0" />
+                </td>
+                <td>
+                    <input name="Items[${rowIndex}].Percentage" class="form-control percentage" type="number" step="0.01" value="0" />
+                </td>
+                <td>
+                    <select name="Items[${rowIndex}].Mode" class="form-select mode">
+                        <option value="add">Add (+)</option>
+                        <option value="subtract" selected>Subtract (−)</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control subtotal" type="number" readonly />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button>
+                </td>
+            `;
+            table.appendChild(newRow);
+            rowIndex++;
+            attachEvents();
+        });
+
+        function removeRow(button) {
+            button.closest('tr').remove();
+            calculateTotals();
+        }
+
+        function attachEvents() {
+            document.querySelectorAll('.quantity, .unit-price, .percentage, .mode').forEach(input => {
+                input.addEventListener('input', calculateTotals);
+                input.addEventListener('change', calculateTotals);
+            });
+        }
+
+        function calculateTotals() {
+            let total = 0;
+            document.querySelectorAll('#itemsTable tbody tr').forEach(row => {
+                const qty = parseFloat(row.querySelector('.quantity').value) || 0;
+                const price = parseFloat(row.querySelector('.unit-price').value) || 0;
+                const percent = parseFloat(row.querySelector('.percentage').value) || 0;
+                const mode = row.querySelector('.mode').value;
+
+                let subtotal = qty * price;
+
+                if (mode === "add") {
+                    subtotal += subtotal * (percent / 100);
+                } else {
+                    subtotal -= subtotal * (percent / 100);
+                }
+
+                row.querySelector('.subtotal').value = subtotal.toFixed(2);
+                total += subtotal;
+            });
+            document.getElementById('totalAmount').innerText = total.toFixed(2);
+        }
+
+        // Initialize event listeners
+        attachEvents();
+    </script>
+}

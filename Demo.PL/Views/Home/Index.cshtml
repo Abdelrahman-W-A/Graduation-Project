@@ -1,0 +1,256 @@
+﻿@model Demo.PL.ViewModels.HomeViewModel
+@using Demo.PL.ViewModels
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Welcome to SCS</h1>
+        <p class="lead">Manage departments, employees, users and transactions easily in one place.</p>
+        <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_3vbOcw.json"
+                       background="transparent"
+                       speed="1"
+                       style="width:200px; height:200px; margin:auto;"
+                       loop autoplay>
+        </lottie-player>
+    </div>
+
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i> About the System
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-home fa-2x mb-2 text-primary"></i>
+                    <h5>Home</h5>
+                    <p class="small">Quick overview and access to main features.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-user-shield fa-2x mb-2 text-secondary"></i>
+                    <h5>Privacy</h5>
+                    <p class="small">Information about the team and data handling policies.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-building fa-2x mb-2 text-success"></i>
+                    <h5>Departments</h5>
+                    <p class="small">Add, update, delete, and view departments easily.</p>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-6 mb-3">
+                    <i class="fas fa-users fa-2x mb-2 text-warning"></i>
+                    <h5>Employees</h5>
+                    <p class="small">Manage all employee records with full CRUD operations.</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <i class="fas fa-user fa-2x mb-2 text-danger"></i>
+                    <h5>Users</h5>
+                    <p class="small">Create and manage system users with ease.</p>
+                </div>
+                <div class="col-md- mb-3">
+                    <i class="fas fa-shopping-cart fa-2x mb-2 text-info"></i>
+                    <h5>Sales & Purchases</h5>
+                    <p class="small">View total sales and purchases in real-time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <i class="fas fa-building fa-2x mb-2 text-primary"></i>
+                    <h5 class="card-title">Departments</h5>
+                    <p class="display-6">@Model.DepartmentsCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x mb-2 text-success"></i>
+                    <h5 class="card-title">Employees</h5>
+                    <p class="display-6">@Model.EmployeesCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <i class="fas fa-user-shield fa-2x mb-2 text-warning"></i>
+                    <h5 class="card-title">Users</h5>
+                    <p class="display-6">@Model.UsersCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mb-5">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-shopping-cart fa-2x mb-2 text-primary"></i>
+                        <h5 class="card-title">Total Sales Invoices</h5>
+                        <p class="display-6">@Model.TotalSales.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-truck-loading fa-2x mb-2 text-danger"></i>
+                        <h5 class="card-title">Total Purchases Invoices</h5>
+                        <p class="display-6">@Model.TotalPurchases.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-dollar-sign fa-2x mb-2 text-success"></i>
+                        <h5 class="card-title">Net Invoices Differences</h5>
+                        <p class="display-6">@Model.NetProfit.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mb-5">
+            <div class="col-12 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-money-bill-wave fa-3x mb-3 text-info"></i>
+                        <h3 class="card-title">Total Salaries</h3>
+                        <p class="display-4">@Model.EmployeesTotalSalaries.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Top 5 Clients</h5>
+                    <canvas id="topClientsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Top 5 Sellers</h5>
+                    <canvas id="topSellersChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-md-12 mt-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Top 5 Sold Categories</h5>
+                    <canvas id="topCategoriesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row text-center mb-5">
+            <div class="col-md-6 mb-3">
+                <a asp-controller="Department" asp-action="Create" class="btn btn-primary btn-lg w-100">
+                    <i class="fas fa-plus-circle"></i> Create Department
+                </a>
+            </div>
+            <div class="col-md-6 mb-3">
+                <a asp-controller="Employees" asp-action="Create" class="btn btn-success btn-lg w-100">
+                    <i class="fas fa-user-plus"></i> Create Employee
+                </a>
+            </div>
+        <div class="text-end mb-3">
+            <a asp-controller="Home" asp-action="GenerateDashboardPdf" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> Generate PDF
+            </a>
+        </div>
+        </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Clients
+        const clientsLabels = @Html.Raw(JsonSerializer.Serialize(Model.TopClients.Select(c => c.ClientName).ToList()));
+        const clientsData   = @Html.Raw(JsonSerializer.Serialize(Model.TopClients.Select(c => c.TotalPurchased).ToList()));
+
+        new Chart(document.getElementById("topClientsChart"), {
+            type: 'bar',
+            data: {
+                labels: clientsLabels,
+                datasets: [{
+                    label: 'Total Purchased',
+                    data: clientsData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Sellers
+        const sellersLabels = @Html.Raw(JsonSerializer.Serialize(Model.TopSellers.Select(s => s.SellerName).ToList()));
+        const sellersData   = @Html.Raw(JsonSerializer.Serialize(Model.TopSellers.Select(s => s.TotalSupplied).ToList()));
+
+        new Chart(document.getElementById("topSellersChart"), {
+            type: 'bar',
+            data: {
+                labels: sellersLabels,
+                datasets: [{
+                    label: 'Total Supplied',
+                    data: sellersData,
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Categories
+        const categoriesLabels = @Html.Raw(JsonSerializer.Serialize(Model.TopCategories.Select(c => c.CategoryName).ToList()));
+        const categoriesData   = @Html.Raw(JsonSerializer.Serialize(Model.TopCategories.Select(c => c.TotalAmount).ToList()));
+
+        new Chart(document.getElementById("topCategoriesChart"), {
+            type: 'bar',
+            data: {
+                labels: categoriesLabels,
+                datasets: [{
+                    label: 'Total Amount',
+                    data: categoriesData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+    }
+    <style >
+    body.dark-mode .card {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+
+    body.dark-mode .card-header {
+        background-color: #333 !important;
+    }
+
+    .card i.fas, .row.text-center i.fas {
+        transition: transform 0.3s ease, color 0.3s ease;
+        cursor: pointer;
+    }
+
+        .card i.fas:hover, .row.text-center i.fas:hover {
+            transform: translateY(-10px) scale(1.2) rotate(-10deg);
+            color: #ff5722;
+        }
+</style>

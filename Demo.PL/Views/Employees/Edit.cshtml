@@ -1,0 +1,43 @@
+﻿@using Demo.BLL.Data_Transfer_Objects__DTOs_.EmployeeDTOs
+@using Demo.BLL.Services.DepartmentServices
+@using Demo.DAL.Models.Shared
+@using Demo.PL.ViewModels
+@model EmployeeViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row justify-content-center align-content-center mt-3">
+    <h1 class="col-8 my-4">Edit Employee</h1>
+    <form method="post" asp-controller="Employees" asp-action="Edit" enctype="multipart/form-data" class="row col-8">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <partial name="PartialViews/CreateEditPartialView" />
+
+        <input type="hidden" asp-for="ExistingImageName" />
+        <input type="hidden" asp-for="ExistingCvFileName" />
+
+        <div class="form-group mb-3 col-6">
+            <label for="CvFile">Upload New CV</label>
+            <input asp-for="CvFile" type="file" class="form-control" />
+            <span asp-validation-for="CvFile" class="text-danger"></span>
+        </div>
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.ExistingCvFileName))
+        {
+            <div class="form-group mb-3 col-6">
+                <label>Current CV</label><br />
+                <a href="~/Files/CVs/@Model.ExistingCvFileName" target="_blank" class="btn btn-outline-info">
+                    <i class="bi bi-file-earmark-pdf"></i> View Current CV
+                </a>
+            </div>
+        }
+
+        <div class="mt-4 m-auto">
+            <input class="btn btn-warning" type="submit" value="Edit" />
+            <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+        </div>
+    </form>
+</div>

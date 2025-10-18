@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Demo.DAL.Models.Seller.Seller>
+@using Demo.DAL.Models.Category
+
+@{
+    ViewData["Title"] = "Sellers";
+}
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["DeleteError"]
+    </div>
+}
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["DeleteSuccess"]
+    </div>
+}
+
+<h2>Sellers</h2>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Seller</a>
+    </p>
+<form method="get" asp-action="Index" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="searchName" value="@ViewBag.SearchName" class="form-control" placeholder="Search by name..." />
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning mt-3">
+        There are no sellers.
+    </div>
+}
+else
+{
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="text-center">
+                <th>Id</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Details</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var seller in Model)
+            {
+                <tr class="text-center">
+                    <td>@seller.Id</td>
+                    <td>@seller.Name</td>
+                    <td>@seller.PhoneNumber</td>
+                    <td>@seller.Address</td>
+                    <td>@seller.Category?.Name</td>
+                    <td>@seller.Category?.CategoryType</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@seller.Id" class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i> Details
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@seller.Id" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@seller.Id" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="mt-4">
+    <a asp-controller="SalesInvoices" asp-action="InvoicesIndex" asp-fragment="Purchases" class="btn btn-outline-dark">
+        <i class="bi bi-arrow-left-circle"></i> Back
+    </a>
+</div>
